@@ -14,6 +14,6 @@ let package = Package(
     targets: [
         .target(
             name: "PageControl",
-            dependencies: [])
+            path: "Sources")
     ]
 )
