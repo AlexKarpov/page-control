@@ -20,7 +20,6 @@ public struct PageControl: View {
                     let isCurrentPage = page == calculatedCurrentPage
                     Circle()
                         .scaledToFill()
-    //                    .scaleEffect(isCurrentPage ? 1 : 0.5)
                         .foregroundColor(isCurrentPage
                                                 ? selectedColor
                                                 : tintColor)
@@ -46,7 +45,6 @@ public struct PageControl: View {
             }
 
         )
-//        .scaledToFit()
     }
 }
 
