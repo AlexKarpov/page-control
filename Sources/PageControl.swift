@@ -5,11 +5,10 @@ public struct PageControl: View {
     @Binding var currentPage: Int
     
     var spacing: CGFloat = 10
+    var tintColor: Color = .gray
+    var selectedColor: Color = .white
     
-    var tintColor: Color = .blue
-    var selectedColor: Color = .red
-    
-    var calculatedCurrentPage: Int {
+    private var calculatedCurrentPage: Int {
         currentPage % pages
     }
     
@@ -19,31 +18,35 @@ public struct PageControl: View {
                 ForEach(0..<pages) { page in
                     let isCurrentPage = page == calculatedCurrentPage
                     Circle()
+                        .fixedSize()
                         .scaledToFill()
-                        .foregroundColor(isCurrentPage
-                                                ? selectedColor
-                                                : tintColor)
-                        .animation(.easeIn)
+                        .foregroundColor(isCurrentPage ?selectedColor : tintColor)
+                        .onTapGesture {
+                            currentPage = page
+                        }
                 }
             }
         }
-        
-        
         .scaledToFit()
         .overlay(
             GeometryReader { proxy in
-                Circle()
-                    .fill()
-                    .frame(width: proxy.size.width, height: proxy.size.height)
-                    .position(
-                        x: proxy.size.width * CGFloat(calculatedCurrentPage) / CGFloat(pages) + (proxy.size.height / 2) + spacing * CGFloat(calculatedCurrentPage) / CGFloat(pages),
-                        y: proxy.size.height/2
+                let offset = proxy.size.width * CGFloat(calculatedCurrentPage) / CGFloat(pages) + spacing * CGFloat(calculatedCurrentPage) / CGFloat(pages)
+                let width = (proxy.size.width / CGFloat(pages) - spacing + 1)
+                RoundedRectangle(cornerRadius: proxy.size.height/2)
+                    .foregroundColor(selectedColor)
+                    .frame(
+                        width: width,
+                        height: proxy.size.height
                     )
-                    .animation(.spring())
-
-
+                    .offset(x: offset)
             }
-
+        )
+        .animation(.default)
+        .padding()
+        .background(
+            Color.gray.opacity(0.5)
+                .blur(radius: 3.0)
+                .clipShape(Capsule(style: .continuous))
         )
     }
 }
@@ -52,6 +55,8 @@ struct PageControl_Previews: PreviewProvider {
     
     static var previews: some View {
         PageControlExample()
+            .previewLayout(.sizeThatFits)
+            
     }
 }
 
